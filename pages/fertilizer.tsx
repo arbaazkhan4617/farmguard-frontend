@@ -10,6 +10,12 @@ interface FertilizerData {
   ph: number;
 }
 
+interface FertilizerRecommendation {
+  fertilizer: string;
+  deficiency: string;
+  application: string;
+}
+
 export default function FertilizerGuide() {
   const [formData, setFormData] = useState<FertilizerData>({
     cropType: '',
@@ -20,7 +26,7 @@ export default function FertilizerGuide() {
     ph: 6.5
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [recommendation, setRecommendation] = useState<any>(null);
+  const [recommendation, setRecommendation] = useState<FertilizerRecommendation | null>(null);
   const router = useRouter();
 
   const cropTypes = [
