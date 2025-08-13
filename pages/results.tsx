@@ -38,6 +38,12 @@ export default function ResultPage() {
     return 'text-red-600';
   };
 
+  const getConfidenceBarColor = (confidence: number) => {
+    if (confidence > 0.8) return '#10b981'; // green-500
+    if (confidence > 0.6) return '#d97706'; // yellow-600
+    return '#dc2626'; // red-600
+  };
+
   const getAdviceIcon = (label: string) => {
     if (label === 'healthy') return '🌱';
     if (label.includes('blight')) return '🦠';
@@ -93,16 +99,34 @@ export default function ResultPage() {
                 <label className="text-sm font-medium text-gray-500 block mb-2">
                   AI Confidence Score
                 </label>
-                <div className="flex items-center space-x-3">
-                  <div className="flex-1 bg-gray-200 rounded-full h-3">
-                    <div 
-                      className={`h-3 rounded-full transition-all duration-500 ${getConfidenceColor(data.result?.confidence || 0)}`}
-                      style={{ width: `${(data.result?.confidence || 0) * 100}%` }}
-                    ></div>
+                <div className="space-y-3">
+                  {/* Progress Bar */}
+                  <div className="flex items-center space-x-3">
+                    <div className="flex-1 bg-gray-200 rounded-full h-4 overflow-hidden">
+                      <div 
+                        className="h-4 rounded-full transition-all duration-700 ease-out"
+                        style={{ 
+                          width: `${Math.max((data.result?.confidence || 0) * 100, 5)}%`,
+                          backgroundColor: getConfidenceBarColor(data.result?.confidence || 0)
+                        }}
+                      ></div>
+                    </div>
+                    <span className={`text-lg font-semibold min-w-[4rem] text-right ${getConfidenceColor(data.result?.confidence || 0)}`}>
+                      {((data.result?.confidence || 0) * 100).toFixed(1)}%
+                    </span>
                   </div>
-                  <span className={`text-lg font-semibold ${getConfidenceColor(data.result?.confidence || 0)}`}>
-                    {((data.result?.confidence || 0) * 100).toFixed(1)}%
-                  </span>
+                  
+                  {/* Confidence Level Indicator */}
+                  <div className="text-center">
+                    <span className={`text-sm font-medium px-3 py-1 rounded-full ${
+                      (data.result?.confidence || 0) > 0.8 ? 'bg-green-100 text-green-800' :
+                      (data.result?.confidence || 0) > 0.6 ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-red-100 text-red-800'
+                    }`}>
+                      {((data.result?.confidence || 0) > 0.8 ? 'High' : 
+                        (data.result?.confidence || 0) > 0.6 ? 'Medium' : 'Low')} Confidence
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -171,7 +195,7 @@ export default function ResultPage() {
             Analyze Another Image
           </button>
           <button
-            onClick={() => window.open('https://github.com/your-username/farmguard', '_blank')}
+            onClick={() => window.open('https://github.com/arbaazkhan4617/farmguard-frontend', '_blank')}
             className="bg-gray-600 hover:bg-gray-700 text-white px-8 py-3 rounded-lg font-medium transition-colors"
           >
             View Source Code
