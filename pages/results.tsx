@@ -6,48 +6,183 @@ export default function ResultPage() {
 
   if (!data) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
-        <p>No result data found. Please go back and upload an image.</p>
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-green-100 flex items-center justify-center px-4">
+        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
+          <div className="text-6xl mb-4">⚠️</div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">No Results Found</h2>
+          <p className="text-gray-600 mb-6">
+            No result data found. Please go back and upload an image for disease detection.
+          </p>
+          <button
+            onClick={() => router.push("/")}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+          >
+            Upload New Image
+          </button>
+        </div>
       </div>
     );
   }
 
+  const getDiseaseColor = (label: string) => {
+    if (label === 'healthy') return 'text-green-600 bg-green-100';
+    if (label.includes('blight')) return 'text-red-600 bg-red-100';
+    if (label.includes('rust')) return 'text-orange-600 bg-orange-100';
+    if (label.includes('mildew')) return 'text-purple-600 bg-purple-100';
+    return 'text-gray-600 bg-gray-100';
+  };
+
+  const getConfidenceColor = (confidence: number) => {
+    if (confidence > 0.8) return 'text-green-600';
+    if (confidence > 0.6) return 'text-yellow-600';
+    return 'text-red-600';
+  };
+
+  const getAdviceIcon = (label: string) => {
+    if (label === 'healthy') return '🌱';
+    if (label.includes('blight')) return '🦠';
+    if (label.includes('rust')) return '🟠';
+    if (label.includes('mildew')) return '🍄';
+    return '💡';
+  };
+
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
-      <div className="bg-gray-800 text-white p-8 rounded-2xl shadow-lg max-w-md w-full">
-        <h1 className="text-3xl font-bold mb-6 text-center">Disease Detection Result</h1>
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-green-100">
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                <span className="text-white text-xl font-bold">🌱</span>
+              </div>
+              <h1 className="text-2xl font-bold text-gray-900">FarmGuard</h1>
+            </div>
+            <div className="text-sm text-gray-600">
+              AI-Powered Plant Disease Detection
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <div className="space-y-4">
-          <div>
-            <p className="text-gray-400 text-sm">Disease</p>
-            <p className="text-lg font-semibold capitalize">{data.result?.label || 'Unknown'}</p>
+      {/* Main Content */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Disease Detection Results</h2>
+          <p className="text-gray-600">AI analysis completed successfully</p>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-8">
+          {/* Results Card */}
+          <div className="bg-white rounded-2xl shadow-xl p-8">
+            <h3 className="text-xl font-semibold text-gray-900 mb-6">Analysis Results</h3>
+            
+            <div className="space-y-6">
+              {/* Disease Type */}
+              <div>
+                <label className="text-sm font-medium text-gray-500 block mb-2">
+                  Detected Condition
+                </label>
+                <div className={`inline-flex items-center px-3 py-2 rounded-full text-sm font-medium ${getDiseaseColor(data.result?.label || 'unknown')}`}>
+                  {data.result?.label ? data.result.label.replace(/_/g, ' ').toUpperCase() : 'UNKNOWN'}
+                </div>
+              </div>
+
+              {/* Confidence Score */}
+              <div>
+                <label className="text-sm font-medium text-gray-500 block mb-2">
+                  AI Confidence Score
+                </label>
+                <div className="flex items-center space-x-3">
+                  <div className="flex-1 bg-gray-200 rounded-full h-3">
+                    <div 
+                      className={`h-3 rounded-full transition-all duration-500 ${getConfidenceColor(data.result?.confidence || 0)}`}
+                      style={{ width: `${(data.result?.confidence || 0) * 100}%` }}
+                    ></div>
+                  </div>
+                  <span className={`text-lg font-semibold ${getConfidenceColor(data.result?.confidence || 0)}`}>
+                    {((data.result?.confidence || 0) * 100).toFixed(1)}%
+                  </span>
+                </div>
+              </div>
+
+              {/* Timestamp */}
+              <div>
+                <label className="text-sm font-medium text-gray-500 block mb-2">
+                  Analysis Time
+                </label>
+                <p className="text-gray-900">
+                  {new Date(data.timestamp).toLocaleString()}
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div>
-            <p className="text-gray-400 text-sm">Confidence</p>
-            <p className="text-lg font-semibold">{((data.result?.confidence || 0) * 100).toFixed(1)}%</p>
-          </div>
+          {/* Advice Card */}
+          <div className="bg-white rounded-2xl shadow-xl p-8">
+            <h3 className="text-xl font-semibold text-gray-900 mb-6">Expert Recommendations</h3>
+            
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3">
+                <div className="text-2xl">{getAdviceIcon(data.result?.label || 'unknown')}</div>
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-2">Treatment Advice</h4>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    {data.result?.advice || 'No specific treatment advice available for this condition. Please consult with a local agricultural expert for personalized recommendations.'}
+                  </p>
+                </div>
+              </div>
 
-          <div>
-            <p className="text-gray-400 text-sm">Advice</p>
-            <p className="text-lg">{data.result?.advice || 'No advice available'}</p>
-          </div>
-
-          <div className="text-center">
-            <img 
-              src={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/uploads/${data.image_url.split('/').pop()}`} 
-              alt="Uploaded plant" 
-              className="w-full h-48 object-cover rounded-lg"
-            />
+              {/* Additional Tips */}
+              <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                <h5 className="font-medium text-blue-900 mb-2">💡 Pro Tips</h5>
+                <ul className="text-sm text-blue-800 space-y-1">
+                  <li>• Take photos in good lighting for better accuracy</li>
+                  <li>• Include both healthy and affected areas in your photos</li>
+                  <li>• Monitor your plants regularly for early detection</li>
+                  <li>• Consider preventive measures for future protection</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
 
-        <button
-          onClick={() => router.push("/")}
-          className="mt-8 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-medium"
-        >
-          Upload Another Image
-        </button>
+        {/* Image Display */}
+        <div className="mt-8 bg-white rounded-2xl shadow-xl p-8">
+          <h3 className="text-xl font-semibold text-gray-900 mb-6 text-center">Analyzed Image</h3>
+          <div className="max-w-md mx-auto">
+            <img 
+              src={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/uploads/${data.image_url.split('/').pop()}`} 
+              alt="Uploaded plant for analysis" 
+              className="w-full h-64 object-cover rounded-xl shadow-lg"
+            />
+            <p className="text-center text-sm text-gray-500 mt-3">
+              Image analyzed by FarmGuard AI
+            </p>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+          <button
+            onClick={() => router.push("/")}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors"
+          >
+            Analyze Another Image
+          </button>
+          <button
+            onClick={() => window.open('https://github.com/your-username/farmguard', '_blank')}
+            className="bg-gray-600 hover:bg-gray-700 text-white px-8 py-3 rounded-lg font-medium transition-colors"
+          >
+            View Source Code
+          </button>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-12 text-center text-gray-500 text-sm">
+          <p>Built for The Syrotech MVP Hackathon 2025</p>
+          <p className="mt-1">Making Agriculture Smarter, One Plant at a Time 🌱</p>
+        </div>
       </div>
     </div>
   );
