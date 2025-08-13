@@ -244,7 +244,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🌐 Live Application
 
-**Frontend**: https://farmguard-frontend-j4mdnyt17-arbazs-projects-2245c2.vercel.app  
+**Frontend**: https://farmguard-frontend-7n5n5yigl-arbazs-projects-2245c0c2.vercel.app  
 **Backend API**: https://farmguard-backend-vm57.onrender.com  
 **API Documentation**: https://farmguard-backend-vm57.onrender.com/docs  
 **GitHub Repository**: https://github.com/arbaazkhan4617/farmguard-frontend
