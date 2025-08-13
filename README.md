@@ -62,7 +62,7 @@
 ### Frontend Setup
 ```bash
 # Clone the repository
-git clone <your-repo-url>
+git clone https://github.com/arbaazkhan4617/farmguard-frontend
 cd farmguard-frontend
 
 # Install dependencies
