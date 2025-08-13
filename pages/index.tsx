@@ -204,6 +204,31 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Enhanced Features Grid */}
+        <div className="grid md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-white rounded-xl p-6 shadow-lg border-2 border-blue-200 hover:border-blue-400 transition-colors cursor-pointer" onClick={() => router.push("/")}>
+            <div className="text-3xl mb-4">🔍</div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Disease Detection</h3>
+            <p className="text-gray-600 text-sm">
+              Upload plant photos for instant AI-powered disease identification
+            </p>
+          </div>
+          <div className="bg-white rounded-xl p-6 shadow-lg border-2 border-green-200 hover:border-green-400 transition-colors cursor-pointer" onClick={() => router.push("/crop-recommendation")}>
+            <div className="text-3xl mb-4">🌾</div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Crop Recommendation</h3>
+            <p className="text-gray-600 text-sm">
+              Get AI recommendations for the best crops based on soil and climate
+            </p>
+          </div>
+          <div className="bg-white rounded-xl p-6 shadow-lg border-2 border-purple-200 hover:border-purple-400 transition-colors cursor-pointer" onClick={() => router.push("/fertilizer")}>
+            <div className="text-3xl mb-4">💧</div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Fertilizer Guide</h3>
+            <p className="text-gray-600 text-sm">
+              Personalized fertilizer recommendations for optimal crop growth
+            </p>
+          </div>
+        </div>
+
         {/* Footer */}
         <div className="text-center text-gray-500 text-sm">
           <p>Built for The Syrotech MVP Hackathon 2025</p>
